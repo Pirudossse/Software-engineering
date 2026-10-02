@@ -1,5 +1,6 @@
 # DevOps Lab – Student Project (Node.js + Jira/GitHub + CI/CD)
 
+
 This repository is a **teaching template** for a 4-student DevOps mini-project.
 It demonstrates a realistic workflow: **PLAN (Jira) → CODE (Git/VS Code) → BUILD/TEST (GitHub Actions) → REVIEW (PRs) → DEPLOY (optional)**.
 
