@@ -9,6 +9,11 @@ describe('formatStatus', () => {
   it('throws on negative', () => {
     expect(() => formatStatus(-1)).toThrow('invalid uptime')
   })
+  it('throws on values that are not a finite number', () => {
+    for (const bad of [NaN, undefined, null, '10', Infinity]) {
+      expect(() => formatStatus(bad)).toThrow('invalid uptime')
+    }
+  })
   it('warming-up under 60s', () => {
     expect(formatStatus(10)).toBe('warming-up')
   })
