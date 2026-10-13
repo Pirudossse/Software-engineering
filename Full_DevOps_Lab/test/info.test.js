@@ -27,4 +27,9 @@ describe('GET /info', () => {
     expect(res.headers['content-type']).toMatch(/application\/json/)
     expect(Object.keys(res.body).sort()).toEqual(['name', 'node', 'uptime', 'version'])
   })
+
+  it('is never cached, since uptime changes on every call', async () => {
+    const res = await request(app).get('/info')
+    expect(res.headers['cache-control']).toBe('no-store')
+  })
 })
