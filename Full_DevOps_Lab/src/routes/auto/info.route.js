@@ -9,6 +9,8 @@ const router = Router()
 
 router.get('/info', (_req, res) => {
   const info = { ...getPackageInfo(), ...getRuntimeInfo() }
+  // uptime changes on every call: never serve a cached copy
+  res.set('Cache-Control', 'no-store')
   res.status(200).json(info)
 })
 
