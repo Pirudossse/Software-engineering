@@ -7,7 +7,7 @@ import { Router } from 'express'
 
 const router = Router()
 
-const patients = [
+export const patients = [
   { id: 1, name: 'Alice', age: 30 },
   { id: 2, name: 'John', age: 45 }
 ]
