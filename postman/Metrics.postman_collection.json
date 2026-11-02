@@ -1,0 +1,41 @@
+{
+  "info": {
+    "_postman_id": "ff4d397b-2d47-4985-9686-591f3ad41a4c",
+    "name": "Healthcare API Tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "59411113",
+    "_collection_link": "https://go.postman.co/collection/59411113-ff4d397b-2d47-4985-9686-591f3ad41a4c?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "GET Metrics",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', function () {\r\n  pm.response.to.have.status(200)\r\n})\r\n\r\npm.test('Uptime is a positive or zero number', function () {\r\n  const data = pm.response.json()\r\n\r\n  pm.expect(data.uptime).to.be.a('number')\r\n  pm.expect(data.uptime).to.be.at.least(0)\r\n})\r\n\r\npm.test('Memory usage is a positive number', function () {\r\n  const data = pm.response.json()\r\n\r\n  pm.expect(data.memoryUsage).to.be.a('number')\r\n  pm.expect(data.memoryUsage).to.be.above(0)\r\n})\r\n\r\npm.test('Doctors count is a non-negative integer', function () {\r\n  const data = pm.response.json()\r\n\r\n  pm.expect(Number.isInteger(data.doctorsCount)).to.eql(true)\r\n  pm.expect(data.doctorsCount).to.be.at.least(0)\r\n})\r\n\r\npm.test('Patients count is a non-negative integer', function () {\r\n  const data = pm.response.json()\r\n\r\n  pm.expect(Number.isInteger(data.patientsCount)).to.eql(true)\r\n  pm.expect(data.patientsCount).to.be.at.least(0)\r\n})"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/metrics",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "metrics"
+          ]
+        },
+        "description": "Generated from cURL: curl --request GET http://localhost:43187/api/metrics"
+      },
+      "response": []
+    }
+  ]
+}
