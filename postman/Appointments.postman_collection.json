@@ -1,0 +1,50 @@
+{
+  "info": {
+    "name": "Appointments API — DEVOPS-20",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Créer un rendez-vous — valide",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"doctor\":\"Dr. Lee\",\"patient\":\"Alice\",\"date\":\"2026-11-10T14:00:00Z\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "http://localhost:3000/api/appointments"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Statut 201', function () {",
+              "  pm.response.to.have.status(201);",
+              "});",
+              "pm.test('Données du rendez-vous', function () {",
+              "  const data = pm.response.json();",
+              "  pm.expect(data.id).to.be.a('number');",
+              "  pm.expect(data.doctor).to.eql('Dr. Lee');",
+              "  pm.expect(data.patient).to.eql('Alice');",
+              "  pm.expect(data.date).to.eql('2026-11-10T14:00:00Z');",
+              "});"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
