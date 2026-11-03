@@ -57,4 +57,19 @@ describe('GET /api/metrics', () => {
     expect(after.body.patientsCount).toBe(before.body.patientsCount + 1)
     expect(after.body.patientsCount).toBe(patients.body.length)
   })
+
+  it('updates appointmentsCount when an appointment is added', async () => {
+    const before = await request(app).get('/api/metrics')
+
+    const created = await request(app)
+      .post('/api/appointments')
+      .send({ doctor: 'Dr. Test', patient: 'Test Patient', date: '2026-12-01' })
+
+    expect(created.status).toBe(201)
+
+    const after = await request(app).get('/api/metrics')
+
+    expect(after.status).toBe(200)
+    expect(after.body.appointmentsCount).toBe(before.body.appointmentsCount + 1)
+  })
 })
