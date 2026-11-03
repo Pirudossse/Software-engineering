@@ -1,7 +1,7 @@
 import { Router } from 'express'
 
 const router = Router()
-const appointments = []
+export const appointments = []
 
 router.post('/api/appointments', (req, res) => {
   const { doctor, patient, date } = req.body ?? {}
