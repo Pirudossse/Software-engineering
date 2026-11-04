@@ -56,3 +56,22 @@ describe('POST /api/appointments', () => {
     expect(res.body.error).toBe('Invalid date')
   })
 })
+describe('GET /api/appointments', () => {
+  it('returns the list of appointments', async () => {
+    const created = await request(app)
+      .post('/api/appointments')
+      .send({
+        doctor: 'Dr. Lee',
+        patient: 'Alice',
+        date: '2026-11-10T14:00:00Z'
+      })
+
+    expect(created.status).toBe(201)
+
+    const res = await request(app).get('/api/appointments')
+
+    expect(res.status).toBe(200)
+    expect(Array.isArray(res.body)).toBe(true)
+    expect(res.body).toContainEqual(created.body)
+  })
+})
