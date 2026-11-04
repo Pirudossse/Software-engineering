@@ -23,43 +23,43 @@ Cette partie a été réalisée individuellement. Les captures suivantes montren
 
 J’ai créé les variables décrivant l’hôpital : son nom, le nombre de médecins et son état d’ouverture. Le terminal affiche le message d’accueil avec 12 médecins. Après avoir changé `isOpen` de `true` à `false`, la condition affiche que l’hôpital est fermé.
 
-![Exercice 2.1 — code et résultat de Badis](captures/partie2/exercice_2_1.png)
+![Exercice 2.1 — code et résultat de Badis](exercice_2_1.png)
 
 ### 2.2 — Tableaux, boucle et recherche
 
 J’ai parcouru le tableau des médecins avec une boucle pour afficher chaque nom et son numéro. L’ajout de Dr. Julie avec `push` fait passer le nombre de médecins de cinq à six. J’ai ensuite testé la recherche : Dr. Lee est trouvé, tandis que Dr. Smith est absent de la liste.
 
-![Exercice 2.2 — code et résultat de Badis](captures/partie2/exercice_2_2.png)
+![Exercice 2.2 — code et résultat de Badis](exercice_2_2.png)
 
 ### 2.3 — Objet patient
 
 J’ai représenté Alice Martin par un objet contenant son âge, ses maladies et les informations de son médecin. L’accès à `patient.doctor.name` permet d’afficher Dr. Lee et sa spécialité. Après l’ajout de `anxiety`, le tableau des maladies passe de deux à trois éléments.
 
-![Exercice 2.3 — code et résultat de Badis](captures/partie2/exercice_2_3.png)
+![Exercice 2.3 — code et résultat de Badis](exercice_2_3.png)
 
 ### 2.4 — Filtrage et ajout d’un patient
 
 Avec `filterByAge(30)`, j’ai récupéré les patients de plus de 30 ans : Alice, 34 ans, et John, 45 ans. J’ai ensuite ajouté Lucas, 22 ans. Il apparaît dans la liste complète avec l’identifiant 4, calculé à partir du plus grand identifiant existant.
 
-![Exercice 2.4 — code et résultat de Badis](captures/partie2/exercice_2_4.png)
+![Exercice 2.4 — code et résultat de Badis](exercice_2_4.png)
 
 ### 2.5 — Séparation en modules
 
 J’ai séparé les données et le programme principal dans deux fichiers. `hospitalData.js` exporte le tableau `doctors` et la fonction `addDoctor`, que `main.js` importe pour ajouter Dr. Julie. L’affichage avant et après l’appel confirme que la liste passe de deux à trois médecins. La configuration `"type": "module"` permet d’utiliser cette syntaxe.
 
-![Exercice 2.5 — code et résultat de Badis](captures/partie2/exercice_2_5.png)
+![Exercice 2.5 — code et résultat de Badis](exercice_2_5.png)
 
 ### 2.6 — Gestion des erreurs
 
 J’ai testé `createAppointment` avec des données complètes, puis avec seulement le nom du médecin. Le premier appel renvoie le rendez-vous de Dr. Lee avec Alice au 10 novembre 2026. Le second déclenche « Missing required fields », récupéré par le bloc `catch`. Cela permet de signaler les données manquantes au lieu de créer un rendez-vous incomplet.
 
-![Exercice 2.6 — code et résultat de Badis](captures/partie2/exercice_2_6.png)
+![Exercice 2.6 — code et résultat de Badis](exercice_2_6.png)
 
 ### 2.7 — Code asynchrone
 
 J’ai simulé la récupération des données de l’hôpital avec une promesse et un délai d’une seconde. Dans `showData`, `await` attend le résultat avant de l’afficher. Le terminal montre d’abord « Fetching hospital data... », puis « Data loaded » avec les données de Central Hospital. La valeur `uptime: 1234` est une donnée d’exemple.
 
-![Exercice 2.7 — code et résultat de Badis](captures/partie2/exercice_2_7.png)
+![Exercice 2.7 — code et résultat de Badis](exercice_2_7.png)
 
 ## Partie 3 — Développement des API
 
