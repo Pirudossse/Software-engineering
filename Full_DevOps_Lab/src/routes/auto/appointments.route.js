@@ -3,6 +3,10 @@ import { Router } from 'express'
 const router = Router()
 export const appointments = []
 
+router.get('/api/appointments', (_req, res) => {
+  res.status(200).json(appointments)
+})
+
 router.post('/api/appointments', (req, res) => {
   const { doctor, patient, date } = req.body ?? {}
 
