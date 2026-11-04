@@ -1,54 +1,44 @@
-# Lab 5 — JavaScript et API Healthcare
+# Lab 5 — Compte rendu
+
+Nous avons repris le projet du Lab 4 pour y ajouter les routes de l’API hospitalière demandées dans le Lab 5. Nous avons conservé les routes existantes et le workflow GitHub Actions, puis intégré nos développements dans la branche `main`.
 
 Dépôt : https://github.com/Pirudossse/Software-engineering
 
-## 1. Objectif et continuité avec le Lab 4
+## Répartition du travail
 
-Ce travail reprend le projet Node.js/Express du Lab 4 et sa chaîne d'intégration continue. Le Lab 5 ajoute un contexte hospitalier : consulter et ajouter des médecins et des patients, programmer des rendez-vous et consulter des métriques. Les routes techniques du Lab 4 (`/health`, `/info`, `/version`) restent disponibles.
+La partie JavaScript a été réalisée individuellement. Pour la partie API, nous nous sommes réparti le travail de la manière suivante :
 
-Le compte rendu présente les exercices JavaScript de la partie 2, les API développées, les collections Postman et la validation par les tests automatiques.
-
-## 2. Partie 2 — Pratique JavaScript
-
-Les exercices sont dans `Full_DevOps_Lab/js-practice.js`, `hospitalData.js` et `main.js`.
-
-| Exercice | Réalisation et apprentissage |
+| Membre | Partie réalisée |
 | --- | --- |
-| 2.1 — Variables et conditions | Nom de l'hôpital, nombre de médecins et état d'ouverture ; utilisation de `const`, `let`, des chaînes interpolées et de `if/else`. |
-| 2.2 — Tableaux et fonctions | Parcours et numérotation des médecins, ajout avec `push`, comptage avec `length`, recherche avec `includes`. |
-| 2.3 — Objets imbriqués | Patient avec âge, maladies et médecin ; accès aux propriétés imbriquées et ajout d'une maladie. |
-| 2.4 — Manipulation de données | Filtrage des patients de plus de 30 ans avec `filter`, ajout d'un patient avec un identifiant et affichage du tableau. |
-| 2.5 — Modules | Export du tableau de médecins et de `addDoctor` depuis `hospitalData.js`, puis import et utilisation dans `main.js`. |
-| 2.6 — Gestion des erreurs | Création d'un rendez-vous ; levée d'une erreur si un champ manque et traitement avec `try/catch`. |
-| 2.7 — Asynchronisme | Simulation du chargement des données avec une `Promise` et `setTimeout`, puis récupération avec `async/await`. |
+| Badis | Rendez-vous — `/api/appointments` |
+| Oussama | Médecins — `/api/doctors` |
+| Eliott | Métriques — `/api/metrics` |
+| Alban | Patients — `/api/patients` |
 
-Depuis `Full_DevOps_Lab`, exécuter :
+## Partie 2 — Exercices JavaScript
 
-```sh
-node js-practice.js
-node main.js
-```
+Nous avons réalisé les exercices autour des données de l’hôpital : affichage de son état d’ouverture, parcours et recherche dans une liste de médecins, manipulation d’un objet patient et ajout d’une maladie. Nous avons également filtré les patients selon leur âge et ajouté un patient à la liste.
 
-Les sorties permettent de vérifier le comportement des exercices. Les captures individuelles de leur exécution sont à joindre au rendu selon les consignes de l'enseignante.
+La séparation du code en modules a été faite dans `hospitalData.js` et `main.js`, avec l’export puis l’import de la liste des médecins et de la fonction `addDoctor`.
 
-## 3. Partie 3 — API hospitalières
+Pour les rendez-vous, nous avons utilisé une fonction qui renvoie les informations du rendez-vous lorsque les champs sont renseignés et déclenche une erreur lorsqu’un champ manque. Cette erreur est récupérée avec `try/catch`. Enfin, nous avons simulé un chargement de données avec une promesse, puis utilisé `async/await` pour attendre le résultat.
 
-Le serveur écoute par défaut sur `http://localhost:3000`. Express lit les corps JSON grâce à `express.json()`. Les fichiers `src/routes/auto/*.route.js` sont chargés automatiquement par `src/app.js`. Le gestionnaire global d'erreurs est enregistré après les routes.
+Les exercices sont regroupés dans `Full_DevOps_Lab/js-practice.js`, `hospitalData.js` et `main.js`. Leur exécution dans le terminal nous a permis de vérifier les résultats et de réaliser les captures de la partie individuelle.
 
-| Méthode | Route | Fonction et réponse |
-| --- | --- | --- |
-| GET | `/api/doctors` | Liste des médecins ; statut 200. |
-| POST | `/api/doctors` | Ajout avec `name` et `specialty` ; statut 201 et identifiant. Champ obligatoire absent : 400. |
-| GET | `/api/patients` | Liste des patients ; statut 200. |
-| POST | `/api/patients` | Ajout avec `name` et `age` ; statut 201 et identifiant. Champ manquant ou âge autre qu'un entier positif ou nul : 400. |
-| POST | `/api/appointments` | Création avec `doctor`, `patient`, `date` ; statut 201 et identifiant. Champs manquants, vides ou non textuels, ou date non interprétable : 400. |
-| GET | `/api/metrics` | Statut 200 avec `uptime` (secondes), `memoryUsage` (RSS en octets), `doctorsCount`, `patientsCount`, `appointmentsCount`. |
+## Partie 3 — Développement des API
 
-### Exemple : création d'un rendez-vous
+Nous avons ajouté les routes dans `Full_DevOps_Lab/src/routes/auto/`. La lecture des données JSON est assurée par `express.json()` dans l’application Express.
 
-Ticket Jira : **DEVOPS-20 — Appointments API — create appointments**.
+| Route | Travail réalisé |
+| --- | --- |
+| `GET /api/doctors` | Renvoie la liste des médecins avec le statut 200. |
+| `POST /api/doctors` | Ajoute un médecin à partir de son nom et de sa spécialité. Renvoie le statut 201 avec un identifiant, ou 400 si un champ obligatoire manque. |
+| `GET /api/patients` | Renvoie la liste des patients avec le statut 200. |
+| `POST /api/patients` | Ajoute un patient avec son nom et son âge. Renvoie 201 si les données sont acceptées, ou 400 si un champ manque ou si l’âge n’est pas un entier positif ou nul. |
+| `POST /api/appointments` | Crée un rendez-vous avec un médecin, un patient et une date. Renvoie 201 avec un identifiant, ou 400 si un champ est manquant, vide ou non textuel, ou si la date est invalide. |
+| `GET /api/metrics` | Renvoie le temps de fonctionnement du serveur, sa consommation mémoire et le nombre de médecins, de patients et de rendez-vous. |
 
-Requête `POST http://localhost:3000/api/appointments`, avec `Content-Type: application/json` :
+Pour la partie rendez-vous de Badis, le développement correspond au ticket **DEVOPS-20**. Voici les données utilisées pour vérifier la création :
 
 ```json
 {
@@ -58,76 +48,41 @@ Requête `POST http://localhost:3000/api/appointments`, avec `Content-Type: appl
 }
 ```
 
-Exemple de réponse **201 Created** sur un serveur venant de démarrer :
+La réponse contient les mêmes données et un identifiant numérique. Nous avons aussi ajouté des tests pour un champ manquant, un champ vide et une date invalide.
 
-```json
-{
-  "id": 1,
-  "doctor": "Dr. Lee",
-  "patient": "Alice",
-  "date": "2026-11-10T14:00:00Z"
-}
-```
+Les données des API sont stockées dans des tableaux en mémoire et sont réinitialisées au redémarrage du serveur. Les métriques utilisent ces mêmes tableaux pour calculer les compteurs.
 
-Un champ manquant ou vide produit `{"error":"Doctor, patient and date are required"}` avec le statut 400. Une date non interprétable produit `{"error":"Invalid date"}` avec le statut 400.
+## Partie 4 — Postman
 
-Les données sont conservées dans des tableaux en mémoire : elles sont réinitialisées au redémarrage. Les rendez-vous contiennent des noms textuels ; le code ne vérifie pas l'existence du médecin ou du patient, ni les conflits de créneaux. Les compteurs de `/api/metrics` lisent directement ces tableaux.
+Nous avons ajouté les collections Postman dans le dossier `postman/` :
 
-### Routes techniques conservées
+- `Healthcare API Postman Collection.json` pour les médecins ;
+- `Patients.postman_collection.json` pour les patients ;
+- `Appointments.postman_collection.json` pour les rendez-vous ;
+- `Metrics.postman_collection.json` pour les métriques.
 
-`GET /` renvoie un message d'accueil ; `GET /health` renvoie `OK` ; `GET /info` décrit l'application et son environnement ; `GET /version` renvoie la version du projet. `GET /boom` sert à tester le gestionnaire d'erreurs et est désactivée en production.
+Elles contiennent les requêtes et les assertions sur les statuts HTTP et les données renvoyées. Les collections médecins et patients comprennent également des requêtes avec des données incorrectes pour vérifier les réponses 400.
 
-## 4. Partie 4 — Vérification avec Postman
+Pour les rendez-vous, l’envoi de la requête POST a renvoyé **201 Created**. Les deux tests Postman ont réussi : le contrôle du statut 201 et celui des données du rendez-vous, avec un identifiant numérique.
 
-Les collections au format Postman v2.1 sont dans le dossier `postman/` à la racine.
+Les requêtes utilisent le serveur local sur `http://localhost:3000`. La collection Metrics utilise la variable `baseUrl`, à régler sur cette adresse ; cette valeur est déjà définie dans la collection Patients.
 
-| Fichier | Requêtes et assertions présentes |
-| --- | --- |
-| `Healthcare API Postman Collection.json` | Médecins : GET (200 et tableau), création (201 et identifiant), champ manquant (400). |
-| `Patients.postman_collection.json` | Patients : GET (200 et structure), création (201 et données), champ manquant et âge invalide (400). |
-| `Appointments.postman_collection.json` | Rendez-vous valide : statut 201, identifiant numérique et vérification des données renvoyées. |
-| `Metrics.postman_collection.json` | Métriques : statut 200, types et valeurs des mesures et des trois compteurs. |
+## Intégration et résultats des tests
 
-Pour reproduire la vérification :
+Nous avons travaillé sur des branches distinctes, puis intégré les contributions par pull requests. Lors de l’intégration des rendez-vous, un conflit dans `app.js` concernait l’ajout de `express.json()`. Il a été résolu en conservant une seule déclaration globale.
 
-1. Démarrer le serveur avec `npm run dev` dans `Full_DevOps_Lab`.
-2. Dans Postman, importer les quatre fichiers du dossier `postman/`.
-3. Pour la collection Metrics, définir la variable `baseUrl` à `http://localhost:3000` dans la collection ou l'environnement actif. La collection Patients possède déjà cette valeur ; les deux autres utilisent une URL locale explicite.
-4. Pour les POST, utiliser `Body → raw → JSON`.
-5. Envoyer les requêtes et consulter `Test Results`, ou lancer chaque collection avec le Runner.
+La CI exécute l’installation des dépendances, ESLint et les tests Vitest avec couverture. Après la fusion de la pull request #23, l’exécution sur `main` au commit `88f9866` s’est terminée avec succès : **45 tests réussis dans 11 fichiers**.
 
-Pour la création d'un rendez-vous, la vérification manuelle effectuée a renvoyé **201 Created** et les deux assertions Postman ont été marquées **passed** : statut 201 et conformité des données. Les cas d'erreur de cette route sont couverts par les tests Vitest. Les collections décrites ci-dessus sont fournies pour reproduire les vérifications ; leur présence seule ne constitue pas un rapport d'exécution de toutes les collections.
-
-## 5. Tests automatiques et CI
-
-Vitest et Supertest vérifient les routes ainsi que les fonctions utilitaires. Les tests de rendez-vous couvrent la création valide, les champs manquants, un champ vide et une date invalide.
-
-Résultat de l'exécution GitHub Actions fournie pour le commit `88f9866` sur `main`, après fusion de la pull request #23 : **succès, 11 fichiers de tests et 45 tests réussis**.
-
-| Mesure globale | Couverture |
+| Couverture globale | Résultat |
 | --- | ---: |
 | Instructions | 95,74 % |
 | Branches | 84,78 % |
 | Fonctions | 88,88 % |
 | Lignes | 96,47 % |
 
-Le dossier `src/routes/auto` atteint 100 % de couverture des lignes. Les seuils dans `vitest.config.js` sont 80 % pour les lignes, fonctions et instructions, et 70 % pour les branches ; ils sont dépassés.
+La couverture des lignes du dossier des routes atteint 100 %. Les seuils configurés dans Vitest sont respectés. Le rapport de couverture est disponible dans l’artefact `coverage-report` de GitHub Actions.
 
-Le workflow `.github/workflows/ci.yml` s'exécute pour les pull requests vers `main` et les push sur `main`. Il utilise Node.js 20 et réalise :
-
-```sh
-npm ci
-npm run lint
-npm test -- --coverage
-```
-
-Le rapport de couverture est publié dans l'artefact `coverage-report`. Ces résultats correspondent à l'exécution CI fournie et ne prétendent pas mesurer une nouvelle exécution après modification de ce README.
-
-## 6. Organisation du travail
-
-Les contributions sont développées sur des branches, associées aux tickets Jira, puis proposées en pull requests. Les conflits sont résolus et la CI doit réussir avant la fusion. Pour DEVOPS-20, la branche `feature/DEVOPS-20-appointments-route` a apporté la route de rendez-vous, ses tests et sa collection Postman via la pull request #20. Le conflit sur `express.json()` a été résolu en conservant une seule déclaration globale.
-
-## 7. Installation et exécution
+## Exécution du projet
 
 Depuis la racine du dépôt :
 
@@ -139,10 +94,4 @@ npm test -- --coverage
 npm start
 ```
 
-Sous Windows PowerShell, utiliser `npm.cmd` à la place de `npm` si nécessaire. `npm run dev` permet aussi de démarrer le serveur avec rechargement automatique.
-
-## 8. Contenu du rendu
-
-Le dépôt contient le code source, les exercices JavaScript, les tests, le workflow CI, les collections Postman et ce compte rendu. Le fichier historique `Full_DevOps_Lab.zip` présent dans le dépôt est une ancienne archive ; le code courant est dans le dossier `Full_DevOps_Lab/`.
-
-Pour le dépôt DVL, fournir l'archive de la version finale du repository et ajouter en commentaire : https://github.com/Pirudossse/Software-engineering . Joindre également les captures demandées par l'enseignante.
+Le serveur démarre par défaut sur `http://localhost:3000`.
