@@ -1,0 +1,145 @@
+{
+  "info": {
+    "name": "Campus du Parc - Buildings",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:43187"
+    }
+  ],
+  "item": [
+    {
+      "name": "GET Buildings",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/buildings"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 200', function () { pm.response.to.have.status(200) })",
+              "pm.test('Campus buildings', function () { const buildings = pm.response.json(); pm.expect(buildings).to.be.an('array'); ['A', 'B', 'C'].forEach(name => pm.expect(buildings.some(b => b.name === name && b.campus === 'Campus du Parc')).to.eql(true)) })"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST Building",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/buildings",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"{{newBuildingName}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.collectionVariables.set('newBuildingName', 'TEST-' + pm.variables.replaceIn('{{$guid}}').toUpperCase())"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 201', function () { pm.response.to.have.status(201) })",
+              "pm.test('Building created', function () { const b = pm.response.json(); pm.expect(b.name).to.eql(pm.collectionVariables.get('newBuildingName')); pm.expect(b.campus).to.eql('Campus du Parc'); pm.expect(b.id).to.be.a('number') })"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST Missing name",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/buildings",
+        "body": {
+          "mode": "raw",
+          "raw": "{}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 400', function () { pm.response.to.have.status(400) })",
+              "pm.test('Missing name rejected', function () { pm.expect(pm.response.json().error).to.eql('Building name is required') })"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST Duplicate building",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/buildings",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \" a \"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 409', function () { pm.response.to.have.status(409) })",
+              "pm.test('Duplicate rejected', function () { pm.expect(pm.response.json().error).to.eql('Building already exists') })"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
