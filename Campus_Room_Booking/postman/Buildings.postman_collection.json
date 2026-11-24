@@ -67,7 +67,8 @@
             "type": "text/javascript",
             "exec": [
               "pm.test('Status 201', function () { pm.response.to.have.status(201) })",
-              "pm.test('Building created', function () { const b = pm.response.json(); pm.expect(b.name).to.eql(pm.collectionVariables.get('newBuildingName')); pm.expect(b.campus).to.eql('Campus du Parc'); pm.expect(b.id).to.be.a('number') })"
+              "pm.test('Building created', function () { const b = pm.response.json(); pm.expect(b.name).to.eql(pm.collectionVariables.get('newBuildingName')); pm.expect(b.campus).to.eql('Campus du Parc'); pm.expect(b.id).to.be.a('number') })",
+              "if (pm.response.code === 201) pm.collectionVariables.set('buildingId', pm.response.json().id)"
             ]
           }
         }
@@ -136,6 +137,80 @@
             "exec": [
               "pm.test('Status 409', function () { pm.response.to.have.status(409) })",
               "pm.test('Duplicate rejected', function () { pm.expect(pm.response.json().error).to.eql('Building already exists') })"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "PUT Building",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/buildings/{{buildingId}}",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"{{newBuildingName}}-UPDATED\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 200', function () { pm.response.to.have.status(200) })",
+              "pm.test('Building updated', function () { const b = pm.response.json(); pm.expect(b.id).to.eql(Number(pm.collectionVariables.get('buildingId'))); pm.expect(b.name).to.eql(pm.collectionVariables.get('newBuildingName') + '-UPDATED'); pm.expect(b.campus).to.eql('Campus du Parc') })"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "DELETE Building",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": "{{baseUrl}}/api/buildings/{{buildingId}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 204', function () { pm.response.to.have.status(204) })",
+              "pm.test('Empty response', function () { pm.expect(pm.response.text()).to.eql('') })"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "DELETE Missing building",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": "{{baseUrl}}/api/buildings/{{buildingId}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 404', function () { pm.response.to.have.status(404) })",
+              "pm.test('Building no longer exists', function () { pm.expect(pm.response.json().error).to.eql('Building not found') })"
             ]
           }
         }
