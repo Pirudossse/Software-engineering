@@ -4,12 +4,12 @@ import { buildings, campusName } from '../data/buildings.js'
 const router = express.Router()
 
 // GET /api/buildings : consulter les bâtiments du campus.
-router.get('/', (_req, res) => {
+router.get('/api/buildings', (_req, res) => {
   res.status(200).json(buildings)
 })
 
 // POST /api/buildings : ajouter un bâtiment sans doublon.
-router.post('/', (req, res) => {
+router.post('/api/buildings', (req, res) => {
   const { name } = req.body ?? {}
 
   if (typeof name !== 'string' || name.trim() === '') {

@@ -36,13 +36,13 @@ Les données sont conservées en mémoire : les ajouts disparaissent au redémar
 
 ## Organisation et intégration avec Rooms
 
-- `src/app.js` configure Express et branche la route Buildings.
+- `src/app.js` configure Express et charge automatiquement les fichiers `src/routes/*.route.js`, dont Rooms et Buildings.
 - `src/index.js` lance le serveur.
 - `src/data/buildings.js` exporte les données partagées.
 - `src/routes/buildings.route.js` traite les GET et POST.
 - `test/buildings.test.js` vérifie lecture, création, validation et doublons.
 
-Pour relier une salle à un bâtiment, l'API Rooms peut importer `buildings` depuis le module de données et vérifier son `buildingId`. Ne pas créer une seconde copie du tableau dans Rooms. Les routes Rooms, Users et Bookings ne sont pas implémentées dans cette livraison.
+Pour relier une salle à un bâtiment, l'API Rooms peut importer `buildings` depuis le module de données et vérifier son `buildingId`. Ne pas créer une seconde copie du tableau dans Rooms. Rooms utilise actuellement un champ texte `building` ; la liaison par identifiant reste à intégrer avec le groupe.
 
 ## Postman
 
