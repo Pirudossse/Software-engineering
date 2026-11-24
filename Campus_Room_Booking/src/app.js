@@ -1,25 +1,28 @@
 import express from 'express'
-import usersRouter from './routes/users.routes.js'
+import fs from 'node:fs'
+import path from 'node:path'
+import { fileURLToPath, pathToFileURL } from 'node:url'
+import { errorHandler } from './utils/errorHandler.js'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const app = express()
 
 app.use(express.json())
 
-app.get('/', (req, res) => {
-  res.status(200).json({
-    message: 'Bienvenue sur l’API du Campus du Parc'
-  })
+app.get('/', (_req, res) => {
+  res.status(200).json({ message: 'Bienvenue sur l’API du Campus du Parc' })
 })
 
-app.use('/api/users', usersRouter)
+app.get('/health', (_req, res) => res.status(200).json({ status: 'ok' }))
 
-// Error handling: keep last
-app.use((err, _req, res, _next) => {
-  if (err.type === 'entity.parse.failed') {
-    return res.status(400).json({ error: 'Invalid JSON body' })
-  }
-  console.error(err)
-  res.status(500).json({ error: 'Internal server error' })
-})
+const routesDir = path.join(__dirname, 'routes')
+const routeFiles = fs.readdirSync(routesDir).filter((f) => f.endsWith('.route.js'))
+for (const file of routeFiles) {
+  const mod = await import(pathToFileURL(path.join(routesDir, file)).href)
+  app.use('/', mod.default)
+}
+
+app.use(errorHandler)
 
 export default app
