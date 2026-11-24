@@ -8,4 +8,10 @@ describe('Health check', () => {
     expect(res.status).toBe(200)
     expect(res.body.status).toBe('ok')
   })
+
+  it('GET / returns the welcome message', async () => {
+    const res = await request(app).get('/')
+    expect(res.status).toBe(200)
+    expect(res.body).toHaveProperty('message')
+  })
 })
