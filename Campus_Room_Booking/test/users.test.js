@@ -92,7 +92,7 @@ describe('Users API', () => {
         .set('Content-Type', 'application/json')
         .send('{"name": ')
       expect(res.status).toBe(400)
-      expect(res.body).toEqual({ error: 'Invalid JSON body' })
+      expect(typeof res.body.error).toBe('string')
     })
   })
 

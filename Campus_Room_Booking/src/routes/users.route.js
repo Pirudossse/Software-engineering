@@ -1,7 +1,7 @@
 /**
  * CRUD for /api/users (SCRUM-17): campus members who can book rooms.
  * A user has: id, name, email (unique, case-insensitive) and role.
- * Mounted on /api/users in app.js. Data is kept in memory.
+ * Auto-mounted by app.js (every *.route.js file). Data is kept in memory.
  */
 import { Router } from 'express'
 
@@ -29,12 +29,12 @@ function invalidField (field, value) {
 }
 
 // GET all
-router.get('/', (_req, res) => {
+router.get('/api/users', (_req, res) => {
   res.status(200).json(users)
 })
 
 // GET by ID
-router.get('/:id', (req, res) => {
+router.get('/api/users/:id', (req, res) => {
   const user = users.find((u) => u.id === Number(req.params.id))
   if (!user) {
     return res.status(404).json({ error: 'User not found' })
@@ -43,7 +43,7 @@ router.get('/:id', (req, res) => {
 })
 
 // POST
-router.post('/', (req, res) => {
+router.post('/api/users', (req, res) => {
   const { name, email, role } = req.body ?? {}
   if (!name || !email || !role) {
     return res.status(400).json({ error: 'Missing required fields' })
@@ -61,7 +61,7 @@ router.post('/', (req, res) => {
 })
 
 // PUT
-router.put('/:id', (req, res) => {
+router.put('/api/users/:id', (req, res) => {
   const id = Number(req.params.id)
   const index = users.findIndex((u) => u.id === id)
   if (index === -1) {
@@ -85,7 +85,7 @@ router.put('/:id', (req, res) => {
 })
 
 // DELETE
-router.delete('/:id', (req, res) => {
+router.delete('/api/users/:id', (req, res) => {
   const index = users.findIndex((u) => u.id === Number(req.params.id))
   if (index === -1) {
     return res.status(404).json({ error: 'User not found' })
