@@ -1,0 +1,34 @@
+name: Campus CI
+
+on:
+  push:
+    branches: [main, campus-room-booking]
+  pull_request:
+    branches: [main, campus-room-booking]
+
+defaults:
+  run:
+    working-directory: Campus_Room_Booking
+
+jobs:
+  campus-build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: Campus_Room_Booking/package-lock.json
+      - name: Install dependencies
+        run: npm ci
+      - name: Lint
+        run: npm run lint
+      - name: Tests and coverage
+        run: npm test -- --coverage
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: campus-coverage-report
+          path: Campus_Room_Booking/coverage
